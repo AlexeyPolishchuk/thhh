@@ -1,0 +1,775 @@
+﻿
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iomanip>
+#include <cmath>
+
+using namespace std;
+
+
+struct Date
+{
+    short day;
+    short month;
+    short year;
+    bool isCorrect();
+};
+
+bool Date::isCorrect()
+{
+    bool result = false;
+
+    if (month > 0 && month <= 12)
+    {
+        switch (month)
+        {
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 12:
+        {
+            if ((day <= 31) && (day > 0))
+                result = true;
+            break;
+        }
+
+        case 4:
+        case 6:
+        case 9:
+        case 11:
+        {
+            if ((day <= 30) && (day > 0))
+                result = true;
+            break;
+        }
+
+        case 2:
+        {
+            if (year % 4 != 0)
+            {
+                if ((day <= 28) && (day > 0))
+                    result = true;
+            }
+            else
+                if (year % 400 == 0)
+                {
+                    if ((day <= 29) && (day > 0))
+                        result = true;
+                }
+                else
+                    if ((year % 100 == 0) && (year % 400 != 0))
+                    {
+                        if ((day == 28) && (day > 0))
+                            result = true;
+                    }
+                    else
+                        if ((year % 4 == 0) && (year % 100 != 0))
+                            if ((day <= 29) && (day > 0))
+                                result = true;
+            break;
+        }
+
+        default:
+            result = false;
+        }
+    }
+    return result;
+}
+
+struct Pharmacy
+{
+    string Preparat_Name;
+    string Company_Creator;
+    int Price_of_unit;
+    int amount_in_package;
+    int Pharmacy_Number;
+    Date expiration_date;
+};
+void resize(int& Pharmacy_counter, Pharmacy*& my_pharmacy) {
+    int newSize = Pharmacy_counter + 1;
+    Pharmacy* newArr = new Pharmacy[newSize];
+
+    copy(my_pharmacy, my_pharmacy + Pharmacy_counter, newArr);
+
+    Pharmacy_counter = newSize;
+    delete[] my_pharmacy;
+    my_pharmacy = newArr;
+}
+
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+    cout << "\nBefore creating an infobase, create a password to access data changes: ";
+    string password;
+    getline(cin, password);
+    int Pharmacy_counter = 20;
+    Pharmacy* my_pharmacy = new Pharmacy[Pharmacy_counter];
+    string path_Preparat_Name, path_Company_Creator, path_Price_of_unit, path_amount_in_package, path_pharmacy_number, path_expiration_date_year, path_expiration_date_month;
+    cout << "\nБудьте бдительны, для каждого параметра создаётся новый файл, путь ,соответственно,будет РАЗНЫМ ДЛЯ КАЖДОГО из них\n";
+    cout << "Be careful, for each parameter a new file is created, the path, respectively, will be DIFFERENT FOR EACH of them\n";
+    cout << "\nExample/Пример\nD:/Cursed/Preparat_Name.txt\n";
+    cout << "\nInput path of file which will collect Preparat Name: \n";
+    cin >> path_Preparat_Name;
+
+    cout << "\nInput path of file which will collect Company Creator: \n";
+    cin >> path_Company_Creator;
+
+    cout << "\nInput path of file which will collect Price of unit: \n";
+    cin >> path_Price_of_unit;
+
+    cout << "\nInput path of file which will collect Amount in package: \n";
+    cin >> path_amount_in_package;
+
+    cout << "\nInput path of file which will collect Pharmacy Number: \n";
+    cin >> path_pharmacy_number;
+
+    cout << "\nInput path of file which will collect Expiration year: \n";
+    cin >> path_expiration_date_year;
+
+    cout << "\nInput path of file which will collect Expiration month: \n";
+    cin >> path_expiration_date_month;
+
+
+    ofstream stream_path_Preparat_Name, stream_path_Company_Creator, stream_path_Price_of_unit, stream_path_amount_in_package, stream_path_pharmacy_number, stream_path_expiration_date_year, stream_path_expiration_date_month;
+    stream_path_Preparat_Name.open(path_Preparat_Name);
+    stream_path_Company_Creator.open(path_Company_Creator);
+    stream_path_Price_of_unit.open(path_Price_of_unit);
+    stream_path_amount_in_package.open(path_amount_in_package);
+    stream_path_pharmacy_number.open(path_pharmacy_number);
+    stream_path_expiration_date_year.open(path_expiration_date_year);
+    stream_path_expiration_date_month.open(path_expiration_date_month);
+
+
+    stream_path_Preparat_Name << "Nurofen\nKsarelto\nDetralex\nKagocel\nKonkol\nKardiomagnil\nIngavirin\nAktovegin\nMiramistin\nMexidol\nPlastir\nCitramon\nAcetilSalicilovayaKislota\nUgolAktivirovaniy\nParacetamol\nChlorsegidin\nNaftizin\nKorvalol\nPerekisVodoroda\nEnalapril\n";
+    
+    stream_path_Company_Creator << "Rfarm\nBiocad\nGenerium\nValentFarm\nFarmasintez\nCanafarmaproduction\nFarmstandartUfavita\nOzon\nVertex\nFarmfirmSotex\nSintez\nSJbiotex\nFort\nScopinfarm\nGrotex\nPetrovaxFarm\nVelfarm\nObnovlenie\nNanolek\nGerofarm\n";
+    for (int i = 0; i < 20; i++)
+    {
+        stream_path_Price_of_unit << rand() % 50 + 10 << "\n";
+    }
+    for (int i = 0; i < 20; i++)
+    {
+        stream_path_amount_in_package << rand() % 150 + 50 << "\n";
+    }
+    for (int i = 0; i < 20; i++)
+    {
+        stream_path_pharmacy_number << rand() % 100 + 1 << "\n";
+    }
+    for (int i = 0; i < 20; i++)
+    {
+        stream_path_expiration_date_year << rand() % 10 + 2017 << "\n";
+    }
+    for (int i = 0; i < 20; i++)
+    {
+        stream_path_expiration_date_month << rand() % 12 + 1 << "\n";
+    }
+
+    stream_path_Preparat_Name.close();
+    stream_path_Company_Creator.close();
+    stream_path_Price_of_unit.close();
+    stream_path_amount_in_package.close();
+    stream_path_pharmacy_number.close();
+    stream_path_expiration_date_year.close();
+    stream_path_expiration_date_month.close();
+
+    ifstream istream_path_Preparat_Name, istream_path_Company_Creator, istream_path_Price_of_unit, istream_path_amount_in_package, istream_path_pharmacy_number, istream_path_expiration_date_year, istream_path_expiration_date_month;
+    istream_path_Preparat_Name.open(path_Preparat_Name);
+    istream_path_Company_Creator.open(path_Company_Creator);
+
+    for (int i = 0; i < Pharmacy_counter; i++)
+    {
+        getline(istream_path_Preparat_Name, my_pharmacy[i].Preparat_Name);
+        getline(istream_path_Company_Creator, my_pharmacy[i].Company_Creator);
+    }
+    stream_path_Price_of_unit.open(path_Price_of_unit);
+    stream_path_amount_in_package.open(path_amount_in_package);
+    stream_path_pharmacy_number.open(path_pharmacy_number);
+    stream_path_expiration_date_year.open(path_expiration_date_year);
+    stream_path_expiration_date_month.open(path_expiration_date_month);
+    for (int i = 0; i < Pharmacy_counter; i++)
+    {
+        my_pharmacy[i].Price_of_unit = rand() % 50 + 10;
+        stream_path_Price_of_unit << my_pharmacy[i].Price_of_unit << "\n";
+        my_pharmacy[i].amount_in_package = rand() % 150 + 50;
+        stream_path_amount_in_package << my_pharmacy[i].amount_in_package << "\n";
+        my_pharmacy[i].Pharmacy_Number = rand() % 100 + 1;
+        stream_path_pharmacy_number << my_pharmacy[i].Pharmacy_Number << "\n";
+        my_pharmacy[i].expiration_date.year = rand() % 10 + 2017;
+        stream_path_expiration_date_year << my_pharmacy[i].expiration_date.year << "\n";
+        my_pharmacy[i].expiration_date.month = rand() % 12 + 1;
+        stream_path_expiration_date_month << my_pharmacy[i].expiration_date.month << "\n";
+    }
+
+    stream_path_Price_of_unit.close();
+    stream_path_amount_in_package.close();
+    stream_path_pharmacy_number.close();
+    stream_path_expiration_date_year.close();
+    stream_path_expiration_date_month.close();
+
+    istream_path_Preparat_Name.close();
+    istream_path_Company_Creator.close();
+
+    ofstream stream_path_database;
+    string path_database;
+    cout << "Enter the path where the DataBase will be stored : \n";
+    cin >> path_database;
+    stream_path_database.open(path_database);
+
+    for (int i = 0; i < Pharmacy_counter; i++)
+    {
+        stream_path_database << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+            << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+            << setw(10) << my_pharmacy[i].Price_of_unit << " \t \t"
+            << setw(10) << my_pharmacy[i].amount_in_package << " \t \t"
+            << setw(10) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+            << setw(10) << my_pharmacy[i].expiration_date.year << "\t \t "
+            << setw(10) << my_pharmacy[i].expiration_date.month << "\n";
+    }
+    stream_path_database.close();
+    system("cls");
+    cout << setw(25) << "|Preparat_Name|" << setw(25) << "|Company_Creator|" << setw(30) << "|Price_of_Unit|" << setw(20) << "|Amount_in_package|" << setw(15) << "|Pharmacy_Number|" << setw(15) << "|Expiration_Year|" << setw(15) << "|Expiration_Month|\n";
+    for (int i = 0; i < Pharmacy_counter; i++)
+    {
+        cout << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+            << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+            << setw(2) << my_pharmacy[i].Price_of_unit << " \t \t"
+            << setw(5) << my_pharmacy[i].amount_in_package << " \t \t"
+            << setw(5) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+            << setw(5) << my_pharmacy[i].expiration_date.year << "\t \t "
+            << setw(5) << my_pharmacy[i].expiration_date.month << "\n";
+    }
+    int chooser = 0;
+    int another_pharmacy_counter = 0;
+    cout << "What to do? Что будем делать? (Input number/Введите число)\n";
+    cout << "1) Удалить все товары с истёкшим сроком годности.\n"
+        << "2) Вывести наименование товаров с минимальным кол-вом единиц в упаковке от 100 шт.\n"
+        << "3) Вывести наименование и количество всех товаров, хранящихся в указанной аптеке\n"
+        << "4) Добавление новых записей в базу данных\n"
+        << "5) Поиск записей по ключевому полю\n"
+        << "6) Редактирование записей базы данных\n";
+    cin >> chooser;
+    if (chooser == 1)
+    {
+        cout << "\nPlease, input the password created before: ";
+        string password_check;
+        cin >> password_check;
+
+        while (password_check != password)
+        {
+            cout << "\nIncorrect password, try again: ";
+            cin >> password_check;
+        }
+        if (password_check == password)
+        {
+            cout << "Correct password.\n";
+            cout << "Enter the path where the database after clearing will be stored: \n";
+
+            string path_cleared_expiration;
+            cin >> path_cleared_expiration;
+            ofstream stream_path_cleared_expiration(path_cleared_expiration);
+            for (int i = 0; i < Pharmacy_counter; i++)
+            {
+                if (my_pharmacy[i].expiration_date.year > 2021)
+                {
+                    stream_path_cleared_expiration << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                        << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                        << setw(2) << my_pharmacy[i].Price_of_unit << " \t \t"
+                        << setw(5) << my_pharmacy[i].amount_in_package << " \t \t"
+                        << setw(5) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                        << setw(5) << my_pharmacy[i].expiration_date.year << "\t \t "
+                        << setw(5) << my_pharmacy[i].expiration_date.month << "\n";
+                    another_pharmacy_counter++;
+                }
+                else
+                {
+                    if (my_pharmacy[i].expiration_date.year == 2021 && my_pharmacy[i].expiration_date.month > 5)
+                    {
+                        stream_path_cleared_expiration << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                            << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                            << setw(2) << my_pharmacy[i].Price_of_unit << " \t \t"
+                            << setw(5) << my_pharmacy[i].amount_in_package << " \t \t"
+                            << setw(5) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                            << setw(5) << my_pharmacy[i].expiration_date.year << "\t \t "
+                            << setw(5) << my_pharmacy[i].expiration_date.month << "\n";
+                        another_pharmacy_counter++;
+                    }
+                }
+            }
+            stream_path_cleared_expiration.close();
+            ifstream istream_path_cleared_expiration;
+
+            istream_path_cleared_expiration.open(path_cleared_expiration);
+            if (!istream_path_cleared_expiration)
+            {
+                cout << "Error, the file cannot be opened!" << endl;
+            }
+            string newdatabase;
+            cout << setw(25) << "|Preparat_Name|" << setw(25) << "|Company_Creator|" << setw(30) << "|Price_of_Unit|" << setw(20) << "|Amount_in_package|" << setw(15) << "|Pharmacy_Number|" << setw(15) << "|Expiration_Year|" << setw(15) << "|Expiration_Month|\n";
+            for (int i = 0; i < another_pharmacy_counter; i++)
+            {
+                newdatabase = "";
+                getline(istream_path_cleared_expiration, newdatabase);
+                cout << newdatabase << "\n";
+            }
+
+            istream_path_cleared_expiration.close();
+        }
+    }
+    else
+    {
+        if (chooser == 2)
+        {
+            cout << setw(25) << "|Preparat_Name|" << setw(25) << "|Company_Creator|" << setw(30) << "|Price_of_Unit|" << setw(20) << "|Amount_in_package|" << setw(15) << "|Pharmacy_Number|" << setw(15) << "|Expiration_Year|" << setw(15) << "|Expiration_Month|\n";
+            int another_counter1 = 0;
+            for (int i = 0; i < Pharmacy_counter; i++)
+            {
+                if (my_pharmacy[i].amount_in_package >= 100)
+                {
+                    another_counter1++;
+                }
+            }
+            for (int i = 0; i < another_counter1; i++)
+            {
+                if (my_pharmacy[i].amount_in_package >= 100)
+                {
+                    cout << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                        << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                        << setw(2) << my_pharmacy[i].Price_of_unit << " \t \t"
+                        << setw(5) << my_pharmacy[i].amount_in_package << " \t \t"
+                        << setw(5) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                        << setw(5) << my_pharmacy[i].expiration_date.year << "\t \t "
+                        << setw(5) << my_pharmacy[i].expiration_date.month << "\n"; 
+                    another_counter1++;
+                }
+            }
+        }
+        else
+        {
+            if (chooser == 3)
+            {
+                int another_counter2 = Pharmacy_counter+1;
+                int pharmacy_number_finder = 0;
+                cout << "\n Введите необходимый номер аптеки: \n";
+                cin >> pharmacy_number_finder;
+                for (int i = 0; i < Pharmacy_counter; i++)
+                {
+                    if (my_pharmacy[i].Pharmacy_Number == pharmacy_number_finder)
+                    {
+                        another_counter2--;
+                    }
+                }
+                cout << setw(25) << "|Preparat_Name|" << setw(25) << "|Company_Creator|" << setw(30) << "|Price_of_Unit|" << setw(20) << "|Amount_in_package|" << setw(15) << "|Pharmacy_Number|" << setw(15) << "|Expiration_Year|" << setw(15) << "|Expiration_Month|\n";
+                for (int i = 0; i < another_counter2; i++)
+                {
+                    if (my_pharmacy[i].Pharmacy_Number == pharmacy_number_finder)
+                    {
+                        cout << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                            << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                            << setw(2) << my_pharmacy[i].Price_of_unit << " \t \t"
+                            << setw(5) << my_pharmacy[i].amount_in_package << " \t \t"
+                            << setw(5) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                            << setw(5) << my_pharmacy[i].expiration_date.year << "\t \t "
+                            << setw(5) << my_pharmacy[i].expiration_date.month << "\n";
+                        another_counter2--;
+                    }
+                }
+            }
+            else
+            {
+                if (chooser == 4)
+                {
+                    string Preparat_Name1,Company_Creator1;
+                    int Price_Of_Unit1;
+                    int amount_in_package1;
+                    int Pharmacy_Number1;
+                    int expiration_date_year1;
+                    int expiration_date_month1;
+                    int another_counter3 = 1;
+                    for (int i = 0; i < another_counter3; i++)
+                    {
+                        Preparat_Name1 = "";
+                            cout << "\nInput Preparat Name, WARNING: input words together , 'Dolo Bene' must be writed like 'DoloBene': \n";
+                            cin >> Preparat_Name1;
+                            Company_Creator1 = "";
+                            cout << "\nInput Company Creator, WARNING: input words together , 'Company Creator' must be writed like 'CompanyCreator': \n";
+                            cin >> Company_Creator1;
+                        
+                            cout << "\nInput amount in package: \n";
+                            cin >> amount_in_package1;
+
+                            cout << "\nInput price of unit: \n";
+                            cin >> Price_Of_Unit1;
+
+                            cout << "\nInput Pharmacy Number: \n";
+                            cin >> Pharmacy_Number1;
+                            cout << "\nInput expiration date year: \n";
+                            cin >> expiration_date_year1;
+                            cout << "\nInput expiration date month: \n";
+                            cin >> expiration_date_month1;
+                    }
+
+                    resize(Pharmacy_counter, my_pharmacy);
+                    for (int i = 0; i < Pharmacy_counter; i++)
+                    {
+                        if (i == 20)
+                        {
+                            my_pharmacy[i].Preparat_Name = Preparat_Name1;
+                            my_pharmacy[i].Company_Creator = Company_Creator1;
+                            my_pharmacy[i].Price_of_unit = amount_in_package1;
+                            my_pharmacy[i].amount_in_package = Price_Of_Unit1;
+                            my_pharmacy[i].Pharmacy_Number = Pharmacy_Number1;
+                            my_pharmacy[i].expiration_date.year = expiration_date_year1;
+                            my_pharmacy[i].expiration_date.month = expiration_date_month1;
+                        }
+                    }
+
+                    ofstream stream_path_addeddatabase;
+
+                    cout << "Enter the path where the database after adding will be stored: ";
+                    string path_addeddatabase;
+                    cin >> path_addeddatabase;
+
+                    stream_path_addeddatabase.open(path_addeddatabase);
+
+                    for (int i = 0; i < Pharmacy_counter; i++)
+                    {
+                        stream_path_addeddatabase << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                            << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                            << setw(10) << my_pharmacy[i].Price_of_unit << " \t \t"
+                            << setw(10) << my_pharmacy[i].amount_in_package << " \t \t"
+                            << setw(10) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                            << setw(10) << my_pharmacy[i].expiration_date.year << "\t \t "
+                            << setw(10) << my_pharmacy[i].expiration_date.month << "\n";
+                    }
+                    stream_path_addeddatabase.close();
+                    cout << setw(25) << "|Preparat_Name|" << setw(25) << "|Company_Creator|" << setw(30) << "|Price_of_Unit|" << setw(20) << "|Amount_in_package|" << setw(15) << "|Pharmacy_Number|" << setw(15) << "|Expiration_Year|" << setw(15) << "|Expiration_Month|\n";
+                    for (int i = 0; i < Pharmacy_counter; i++)
+                    {
+                        cout << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                            << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                            << setw(2) << my_pharmacy[i].Price_of_unit << " \t \t"
+                            << setw(5) << my_pharmacy[i].amount_in_package << " \t \t"
+                            << setw(5) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                            << setw(5) << my_pharmacy[i].expiration_date.year << "\t \t "
+                            << setw(5) << my_pharmacy[i].expiration_date.month << "\n";
+                    }
+                }
+                else
+                {
+                    if (chooser == 5)
+                    {
+                        int finder_of_value = 0;
+                        int value = 0;
+                        string stringvalue = "";
+                        cout << "\nПо какому значению будем искать необходимые данные? (Ввести номер):\n1) Наименование препарата(Preparat_Name)\n2) Компания-создатель(Company_Creator)\n3) Цена за единицу(Price_of_unit) \n4) Количество в упаковке(Amount_in_package)\n5) Номер аптеки(Pharmacy_Number)\n6) Год истечения срока годности(expiration_date_year)\n7) Месяц истечения срока годности(expiration_date_month)\n";
+                        cin >> finder_of_value;
+                        if (finder_of_value == 1)
+                        {
+                            cout << "\nВведите необходимое название препарата:\n";
+                            
+                            cin >> stringvalue;
+                            
+                            cout << setw(25) << "|Preparat_Name|" << setw(25) << "|Company_Creator|" << setw(30) << "|Price_of_Unit|" << setw(20) << "|Amount_in_package|" << setw(15) << "|Pharmacy_Number|" << setw(15) << "|Expiration_Year|" << setw(15) << "|Expiration_Month|\n";
+                            for (int i = 0; i < Pharmacy_counter; i++)
+                            {
+                                if (my_pharmacy[i].Preparat_Name == stringvalue)
+                                {
+                                    cout << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                                        << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                                        << setw(2) << my_pharmacy[i].Price_of_unit << " \t \t"
+                                        << setw(5) << my_pharmacy[i].amount_in_package << " \t \t"
+                                        << setw(5) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                                        << setw(5) << my_pharmacy[i].expiration_date.year << "\t \t "
+                                        << setw(5) << my_pharmacy[i].expiration_date.month << "\n";
+                                    
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            if (finder_of_value == 2)
+                            {
+                                cout << "\nВведите необходимое название компании-производителя:\n";
+
+                                cin >> stringvalue;
+
+                                cout << setw(25) << "|Preparat_Name|" << setw(25) << "|Company_Creator|" << setw(30) << "|Price_of_Unit|" << setw(20) << "|Amount_in_package|" << setw(15) << "|Pharmacy_Number|" << setw(15) << "|Expiration_Year|" << setw(15) << "|Expiration_Month|\n";
+                                for (int i = 0; i < Pharmacy_counter; i++)
+                                {
+                                    if (my_pharmacy[i].Company_Creator == stringvalue)
+                                    {
+                                        cout << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                                            << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                                            << setw(2) << my_pharmacy[i].Price_of_unit << " \t \t"
+                                            << setw(5) << my_pharmacy[i].amount_in_package << " \t \t"
+                                            << setw(5) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                                            << setw(5) << my_pharmacy[i].expiration_date.year << "\t \t "
+                                            << setw(5) << my_pharmacy[i].expiration_date.month << "\n";
+
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (finder_of_value == 3)
+                                {
+                                        cout << "\nВведите необходимую цену за единицу:\n";
+
+                                        cin >> value;
+
+                                        cout << setw(25) << "|Preparat_Name|" << setw(25) << "|Company_Creator|" << setw(30) << "|Price_of_Unit|" << setw(20) << "|Amount_in_package|" << setw(15) << "|Pharmacy_Number|" << setw(15) << "|Expiration_Year|" << setw(15) << "|Expiration_Month|\n";
+                                        for (int i = 0; i < Pharmacy_counter; i++)
+                                        {
+                                            if (my_pharmacy[i].Price_of_unit == value)
+                                            {
+                                                cout << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                                                    << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                                                    << setw(2) << my_pharmacy[i].Price_of_unit << " \t \t"
+                                                    << setw(5) << my_pharmacy[i].amount_in_package << " \t \t"
+                                                    << setw(5) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                                                    << setw(5) << my_pharmacy[i].expiration_date.year << "\t \t"
+                                                    << setw(5) << my_pharmacy[i].expiration_date.month << "\n";
+
+                                            }
+                                        }
+                                }
+                                else
+                                {
+                                    if (finder_of_value == 4)
+                                    {
+                                    
+                                                cout << "\nВведите необходимое количество в упаковке:\n";
+
+                                                cin >> value;
+
+                                                cout << setw(25) << "|Preparat_Name|" << setw(25) << "|Company_Creator|" << setw(30) << "|Price_of_Unit|" << setw(20) << "|Amount_in_package|" << setw(15) << "|Pharmacy_Number|" << setw(15) << "|Expiration_Year|" << setw(15) << "|Expiration_Month|\n";
+                                                for (int i = 0; i < Pharmacy_counter; i++)
+                                                {
+                                                    if (my_pharmacy[i].amount_in_package == value)
+                                                    {
+                                                        cout << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                                                            << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                                                            << setw(2) << my_pharmacy[i].Price_of_unit << " \t \t"
+                                                            << setw(5) << my_pharmacy[i].amount_in_package << " \t \t"
+                                                            << setw(5) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                                                            << setw(5) << my_pharmacy[i].expiration_date.year << "\t \t"
+                                                            << setw(5) << my_pharmacy[i].expiration_date.month << "\n";
+
+                                                    }
+                                                }
+                                    }
+                                    else
+                                    {
+                                        if (finder_of_value == 5)
+                                        {
+                                            cout << "\nВведите необходимый номер аптеки:\n";
+
+                                            cin >> value;
+
+                                            cout << setw(25) << "|Preparat_Name|" << setw(25) << "|Company_Creator|" << setw(30) << "|Price_of_Unit|" << setw(20) << "|Amount_in_package|" << setw(15) << "|Pharmacy_Number|" << setw(15) << "|Expiration_Year|" << setw(15) << "|Expiration_Month|\n";
+                                            for (int i = 0; i < Pharmacy_counter; i++)
+                                            {
+                                                if (my_pharmacy[i].Pharmacy_Number == value)
+                                                {
+                                                    cout << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                                                        << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                                                        << setw(2) << my_pharmacy[i].Price_of_unit << " \t \t"
+                                                        << setw(5) << my_pharmacy[i].amount_in_package << " \t \t"
+                                                        << setw(5) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                                                        << setw(5) << my_pharmacy[i].expiration_date.year << "\t \t"
+                                                        << setw(5) << my_pharmacy[i].expiration_date.month << "\n";
+
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (finder_of_value == 6)
+                                            {
+                                                cout << "\nВведите необходимый год истечения срока годности:\n";
+
+                                                cin >> value;
+
+                                                cout << setw(25) << "|Preparat_Name|" << setw(25) << "|Company_Creator|" << setw(30) << "|Price_of_Unit|" << setw(20) << "|Amount_in_package|" << setw(15) << "|Pharmacy_Number|" << setw(15) << "|Expiration_Year|" << setw(15) << "|Expiration_Month|\n";
+                                                for (int i = 0; i < Pharmacy_counter; i++)
+                                                {
+                                                    if (my_pharmacy[i].expiration_date.year == value)
+                                                    {
+                                                        cout << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                                                            << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                                                            << setw(2) << my_pharmacy[i].Price_of_unit << " \t \t"
+                                                            << setw(5) << my_pharmacy[i].amount_in_package << " \t \t"
+                                                            << setw(5) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                                                            << setw(5) << my_pharmacy[i].expiration_date.year << "\t \t"
+                                                            << setw(5) << my_pharmacy[i].expiration_date.month << "\n";
+
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (finder_of_value == 7)
+                                                {
+                                                    cout << "\nВведите необходимый месяц истечения срока годности:\n";
+
+                                                    cin >> value;
+                                                    if (value < 1 || value>12)
+                                                    {
+                                                        cout << "\nНет месяца с таким номером, повторите попытку:\n";
+                                                        cin >> value;
+                                                    }
+
+                                                    cout << setw(25) << "|Preparat_Name|" << setw(25) << "|Company_Creator|" << setw(30) << "|Price_of_Unit|" << setw(20) << "|Amount_in_package|" << setw(15) << "|Pharmacy_Number|" << setw(15) << "|Expiration_Year|" << setw(15) << "|Expiration_Month|\n";
+                                                    for (int i = 0; i < Pharmacy_counter; i++)
+                                                    {
+                                                        if (my_pharmacy[i].expiration_date.month == value)
+                                                        {
+                                                            cout << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                                                                << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                                                                << setw(2) << my_pharmacy[i].Price_of_unit << " \t \t"
+                                                                << setw(5) << my_pharmacy[i].amount_in_package << " \t \t"
+                                                                << setw(5) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                                                                << setw(5) << my_pharmacy[i].expiration_date.year << "\t \t"
+                                                                << setw(5) << my_pharmacy[i].expiration_date.month << "\n";
+
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    cout << "\nВы нашли пасхалку! Шучу.. Не нашли.. Некорректный ввод данных, аварийное завершение программы (Не рекомендуется повторять)\n";
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (chooser == 6)
+                        {
+                            cout << "\nPlease, input the password created before: ";
+                            string password_check;
+                            cin >> password_check;
+
+                            while (password_check != password)
+                            {
+                                cout << "\nIncorrect password, try again: ";
+                                cin >> password_check;
+                            }
+                            if (password_check == password)
+                            {
+                                cout << "Correct password.\n";
+                                int line_counter = 0;
+                                int line_founder = 0;
+                                cout << setw(25) << "|Preparat_Name|" << setw(25) << "|Company_Creator|" << setw(30) << "|Price_of_Unit|" << setw(20) << "|Amount_in_package|" << setw(15) << "|Pharmacy_Number|" << setw(15) << "|Expiration_Year|" << setw(15) << "|Expiration_Month|\n";
+                                for (int i = 0; i < Pharmacy_counter; i++)
+                                {
+                                    cout << line_counter << ")" << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                                        << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                                        << setw(2) << my_pharmacy[i].Price_of_unit << " \t \t"
+                                        << setw(5) << my_pharmacy[i].amount_in_package << " \t \t"
+                                        << setw(5) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                                        << setw(5) << my_pharmacy[i].expiration_date.year << "\t \t "
+                                        << setw(5) << my_pharmacy[i].expiration_date.month << "\n";
+                                    line_counter++;
+                                }
+                                cout << "\nChoose line, which you wanna edit/Выберите строку,которую вы хотите отредактировать (Введите число): \n";
+                                cin >> line_founder;
+                                string Preparat_Name2, Company_Creator2;
+                                int Price_Of_Unit2;
+                                int amount_in_package2;
+                                int Pharmacy_Number2;
+                                int expiration_date_year2;
+                                int expiration_date_month2;
+                                Preparat_Name2 = "";
+                                cout << "\nInput Preparat Name, WARNING: input words together , 'Dolo Bene' must be writed like 'DoloBene': \n";
+                                cin >> Preparat_Name2;
+                                Company_Creator2 = "";
+                                cout << "\nInput Company Creator, WARNING: input words together , 'Company Creator' must be writed like 'CompanyCreator': \n";
+                                cin >> Company_Creator2;
+
+                                cout << "\nInput amount in package: \n";
+                                cin >> amount_in_package2;
+
+                                cout << "\nInput price of unit: \n";
+                                cin >> Price_Of_Unit2;
+
+                                cout << "\nInput Pharmacy Number: \n";
+                                cin >> Pharmacy_Number2;
+                                cout << "\nInput expiration date year: \n";
+                                cin >> expiration_date_year2;
+                                cout << "\nInput expiration date month: \n";
+                                cin >> expiration_date_month2;
+                                for (int i = 0; i < Pharmacy_counter; i++)
+                                {
+                                    if (i == line_founder)
+                                    {
+                                        my_pharmacy[i].Preparat_Name = Preparat_Name2;
+                                        my_pharmacy[i].Company_Creator = Company_Creator2;
+                                        my_pharmacy[i].Price_of_unit = amount_in_package2;
+                                        my_pharmacy[i].amount_in_package = Price_Of_Unit2;
+                                        my_pharmacy[i].Pharmacy_Number = Pharmacy_Number2;
+                                        my_pharmacy[i].expiration_date.year = expiration_date_year2;
+                                        my_pharmacy[i].expiration_date.month = expiration_date_month2;
+                                    }
+                                }
+                                ofstream stream_path_editeddatabase;
+
+                                cout << "Enter the path where the database after adding will be stored: ";
+                                string path_editeddatabase;
+                                cin >> path_editeddatabase;
+
+                                stream_path_editeddatabase.open(path_editeddatabase);
+
+                                for (int i = 0; i < Pharmacy_counter; i++)
+                                {
+                                    stream_path_editeddatabase << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                                        << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                                        << setw(10) << my_pharmacy[i].Price_of_unit << " \t \t"
+                                        << setw(10) << my_pharmacy[i].amount_in_package << " \t \t"
+                                        << setw(10) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                                        << setw(10) << my_pharmacy[i].expiration_date.year << "\t \t "
+                                        << setw(10) << my_pharmacy[i].expiration_date.month << "\n";
+                                }
+                                stream_path_editeddatabase.close();
+                                line_counter = 0;
+                                cout << setw(25) << "|Preparat_Name|" << setw(25) << "|Company_Creator|" << setw(30) << "|Price_of_Unit|" << setw(20) << "|Amount_in_package|" << setw(15) << "|Pharmacy_Number|" << setw(15) << "|Expiration_Year|" << setw(15) << "|Expiration_Month|\n";
+                                for (int i = 0; i < Pharmacy_counter; i++)
+                                {
+                                    cout << line_counter << ")" << setw(25) << my_pharmacy[i].Preparat_Name << "\t"
+                                        << setw(25) << my_pharmacy[i].Company_Creator << " \t \t "
+                                        << setw(2) << my_pharmacy[i].Price_of_unit << " \t \t"
+                                        << setw(5) << my_pharmacy[i].amount_in_package << " \t \t"
+                                        << setw(5) << my_pharmacy[i].Pharmacy_Number << "\t \t "
+                                        << setw(5) << my_pharmacy[i].expiration_date.year << "\t \t "
+                                        << setw(5) << my_pharmacy[i].expiration_date.month << "\n";
+                                    line_counter++;
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            cout << "\nВы нашли пасхалку! Шучу.. Не нашли.. Некорректный ввод данных, аварийное завершение программы (Не рекомендуется повторять)\n";
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+
